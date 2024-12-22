@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>抽籤</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, 
+                #87CEEB 0%, 
+                #87CEEB 50%, 
+                #1a1a2e 50%, 
+                #1a1a2e 100%
+            );
+            font-family: 'Noto Serif TC', serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 太陽 */
+        .sun {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            top: 5%;
+            left: 10%;
+            opacity: 0.8;
+        }
+        .sun::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #ffd700;
+            border-radius: 50%;
+            box-shadow: 0 0 60px #ffd700;
+        }
+        .sun::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            top: -240px;
+            left: -240px;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255, 215, 0, 0) 5deg,
+                rgba(255, 215, 0, 0.3) 7.5deg,
+                rgba(255, 215, 0, 0) 10deg,
+                transparent 15deg,
+                transparent 30deg,
+                rgba(255, 215, 0, 0) 35deg,
+                rgba(255, 215, 0, 0.3) 37.5deg,
+                rgba(255, 215, 0, 0) 40deg,
+                transparent 45deg,
+                transparent 60deg,
+                rgba(255, 215, 0, 0) 65deg,
+                rgba(255, 215, 0, 0.3) 67.5deg,
+                rgba(255, 215, 0, 0) 70deg,
+                transparent 75deg,
+                transparent 90deg,
+                rgba(255, 215, 0, 0) 95deg,
+                rgba(255, 215, 0, 0.3) 97.5deg,
+                rgba(255, 215, 0, 0) 100deg,
+                transparent 105deg,
+                transparent 120deg,
+                rgba(255, 215, 0, 0) 125deg,
+                rgba(255, 215, 0, 0.3) 127.5deg,
+                rgba(255, 215, 0, 0) 130deg,
+                transparent 135deg,
+                transparent 150deg,
+                rgba(255, 215, 0, 0) 155deg,
+                rgba(255, 215, 0, 0.3) 157.5deg,
+                rgba(255, 215, 0, 0) 160deg,
+                transparent 165deg,
+                transparent 180deg,
+                rgba(255, 215, 0, 0) 185deg,
+                rgba(255, 215, 0, 0.3) 187.5deg,
+                rgba(255, 215, 0, 0) 190deg,
+                transparent 195deg,
+                transparent 210deg,
+                rgba(255, 215, 0, 0) 215deg,
+                rgba(255, 215, 0, 0.3) 217.5deg,
+                rgba(255, 215, 0, 0) 220deg,
+                transparent 225deg,
+                transparent 240deg,
+                rgba(255, 215, 0, 0) 245deg,
+                rgba(255, 215, 0, 0.3) 247.5deg,
+                rgba(255, 215, 0, 0) 250deg,
+                transparent 255deg,
+                transparent 270deg,
+                rgba(255, 215, 0, 0) 275deg,
+                rgba(255, 215, 0, 0.3) 277.5deg,
+                rgba(255, 215, 0, 0) 280deg,
+                transparent 285deg,
+                transparent 300deg,
+                rgba(255, 215, 0, 0) 305deg,
+                rgba(255, 215, 0, 0.3) 307.5deg,
+                rgba(255, 215, 0, 0) 310deg,
+                transparent 315deg,
+                transparent 330deg,
+                rgba(255, 215, 0, 0) 335deg,
+                rgba(255, 215, 0, 0.3) 337.5deg,
+                rgba(255, 215, 0, 0) 340deg,
+                transparent 345deg
+            );
+            pointer-events: none;
+            animation: rotateSun 20s linear infinite;
+        }
+        @keyframes rotateSun {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 月亮 */
+        .moon {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: #e5e7eb;
+            border-radius: 50%;
+            bottom: 10%;
+            right: 10%;
+            opacity: 0.8;
+        }
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -25%;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            border-radius: 50%;
+            transform: none;
+        }
+
+        /* 雲朵 */
+        .cloud {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            opacity: 0.6;
+            animation: float linear infinite;
+        }
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+        .cloud1 {
+            width: 100px;
+            height: 30px;
+            top: 15%;
+            left: -100px;
+            animation-duration: 25s;
+        }
+        .cloud1::before {
+            width: 50px;
+            height: 50px;
+            top: -20px;
+            left: 15px;
+        }
+        .cloud1::after {
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            right: 15px;
+        }
+        .cloud2 {
+            width: 80px;
+            height: 25px;
+            top: 30%;
+            left: -80px;
+            animation-duration: 20s;
+            animation-delay: -15s;
+        }
+        .cloud2::before {
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            left: 10px;
+        }
+        .cloud2::after {
+            width: 30px;
+            height: 30px;
+            top: -10px;
+            right: 10px;
+        }
+        .cloud3 {
+            width: 120px;
+            height: 35px;
+            top: 45%;
+            left: -120px;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+        .cloud3::before {
+            width: 60px;
+            height: 60px;
+            top: -25px;
+            left: 20px;
+        }
+        .cloud3::after {
+            width: 45px;
+            height: 45px;
+            top: -20px;
+            right: 20px;
+        }
+        @keyframes float {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(50vw - 100px)); }
+        }
+
+        /* 星星 */
+        .stars {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            clip-path: polygon(100% 100%, 50% 50%, 100% 0, 100% 100%);
+        }
+        .star {
+            position: absolute;
+            background: white;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
+                               79% 91%, 50% 70%, 21% 91%, 32% 57%, 
+                               2% 35%, 39% 35%);
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+            100% { opacity: 0.2; transform: scale(1); }
+        }
+
+        /* 主要內容區塊 */
+        .scroll-container {
+            width: 320px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .subtitle {
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 抽籤容器 */
+        .fortune-container {
+            width: 160px;
+            height: 256px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .fortune-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* 外發光效果 - 調整放在圖片周圍 */
+        .bamboo-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 160px;
+            height: 256px;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 80%
+            );
+            filter: blur(8px);
+            z-index: 0;
+        }
+
+        /* 籤筒區域 */
+        #bambooContainer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 0.5rem;
+            overflow: visible; /* 為了讓光暈不被裁切 */
+        }
+        #bambooContainer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1; /* 高於光暈 */
+        }
+
+        /* 點擊後顯示籤號的區域（改成在 hint-text 顯示） */
+        /* 可以用 slip 當作抽出的籤樣式 */
+        .slip {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            color: #1a1a2e;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .hint-text {
+            margin-top: 2rem;
+            color: white;
+            font-size: 1rem;
+            z-index: 1;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* 搖晃效果 */
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        .shaking {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景物件：太陽、月亮、星星、雲 -->
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div class="stars"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <!-- 主要內容容器 -->
+    <div class="scroll-container">
+        <div class="title">他/她的日與夜</div>
+        <div class="subtitle">人物今日運勢</div>
+        
+        <!-- 點擊後抽籤的籤筒 -->
+        <div class="fortune-container" id="fortuneContainer">
+            <div class="bamboo-glow"></div> <!-- 光暈效果 -->
+            <div id="bambooContainer">
+                <!-- 籤筒圖片 -->
+                <img 
+                  src="https://i.imgur.com/2uLW6bT.png"
+                  alt="籤筒"
+                />
+            </div>
+        </div>
+
+        <!-- 點擊前：顯示文字「點擊竹筒抽籤」；點擊後：改成籤號樣式 -->
+        <div class="hint-text" id="hintText">點擊竹筒抽籤</div>
+    </div>
+
+    <script>
+        // 產生閃爍星星
+        const createStars = () => {
+            const stars = document.querySelector('.stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * (8 - 4) + 4;
+                
+                star.style.left = x + 'vw';
+                star.style.top = y + 'vh';
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                
+                stars.appendChild(star);
+            }
+        };
+        createStars();
+
+        // 抽籤功能
+        const container = document.getElementById('fortuneContainer');
+        const bambooContainer = document.getElementById('bambooContainer');
+        const hintText = document.getElementById('hintText');
+
+        let isAnimating = false;
+
+        container.addEventListener('click', () => {
+            if (isAnimating) return;
+
+            isAnimating = true;
+            // 搖晃動畫
+            bambooContainer.classList.add('shaking');
+
+            setTimeout(() => {
+                // 隨機取得 1~58 的整數
+                const randomNumber = Math.floor(Math.random() * 58) + 1;
+
+                // 把籤號顯示在原先「點擊竹筒抽籤」那個文字區域
+                hintText.innerHTML = `<div class="slip">你抽到的籤號：${randomNumber}</div>`;
+
+                bambooContainer.classList.remove('shaking');
+
+                // 五秒後自動恢復為「點擊竹筒抽籤」
+                setTimeout(() => {
+                    hintText.innerHTML = '點擊竹筒抽籤';
+                    isAnimating = false;
+                }, 5000);
+
+            }, 500);
+        });
+    </script>
+</body>
+</html>
