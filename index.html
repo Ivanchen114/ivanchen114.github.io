@@ -138,13 +138,34 @@ h1 {
 .card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 .card-title {
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: -0.005em;
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.favicon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: contain;
+}
+.click-count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  padding: 0.15rem 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 99px;
 }
 .status {
   width: 8px;
@@ -366,14 +387,18 @@ function render(filter = "") {
     html += `<section class="section"><div class="section-title">${escapeHtml(cat)}</div><div class="grid">`;
     for (const t of items) {
       const tagLabel = tagLabels[t.tag] || t.tag;
-      html += `<a class="card" href="${escapeAttr(t.url)}" target="_blank" rel="noopener noreferrer">
+      const favicon = getFavicon(t.url);
+      const clicks = getClickCount(t.url);
+      html += `<a class="card" data-url="${escapeAttr(t.url)}" href="${escapeAttr(t.url)}" target="_blank" rel="noopener noreferrer">
         <div class="card-header">
+          ${favicon ? `<img class="favicon" src="${escapeAttr(favicon)}" alt="" onerror="this.style.display='none'">` : ""}
           <div class="card-title">${escapeHtml(t.title)}</div>
           <div class="status ${t.status}" title="${t.status}"></div>
         </div>
         <div class="card-desc">${escapeHtml(t.desc)}</div>
         <div class="card-footer">
           <span class="tag ${t.tag}">${escapeHtml(tagLabel)}</span>
+          ${clicks > 0 ? `<span class="click-count" title="點擊次數">↗ ${clicks}</span>` : ""}
         </div>
       </a>`;
     }
@@ -389,11 +414,40 @@ function escapeHtml(s) {
 }
 function escapeAttr(s) { return escapeHtml(s); }
 
+// Favicon — 用 Google 的 favicon 服務,localhost 用內嵌 SVG
+const LOCAL_ICON = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 10l3 3-3 3M13 16h4"/></svg>'
+);
+function getFavicon(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "localhost" || u.hostname.startsWith("127.")) return LOCAL_ICON;
+    return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+  } catch { return null; }
+}
+
+// 點擊次數 — localStorage,key 用 url
+function getClickCount(url) {
+  return parseInt(localStorage.getItem("clicks_" + url) || "0", 10);
+}
+function incrementClickCount(url) {
+  localStorage.setItem("clicks_" + url, String(getClickCount(url) + 1));
+}
+
 // ============================================================
 // 互動:搜尋 + 鍵盤快捷鍵
 // ============================================================
 const search = document.getElementById("search");
 search.addEventListener("input", e => render(e.target.value));
+
+// 點卡片時記次數(事件委派,卡片重渲染後仍生效)
+document.getElementById("content").addEventListener("click", e => {
+  const card = e.target.closest(".card");
+  if (!card || !card.dataset.url) return;
+  incrementClickCount(card.dataset.url);
+  // 延後到下一個 tick 重渲染,不擋導航
+  setTimeout(() => render(search.value), 0);
+});
 
 document.addEventListener("keydown", e => {
   // 按 / 聚焦搜尋框
