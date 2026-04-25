@@ -20,8 +20,6 @@
   --tag-apps-fg: #fff;
   --tag-local-bg: #16a34a;
   --tag-local-fg: #fff;
-  --tag-ghp-bg: #6e40c9;
-  --tag-ghp-fg: #fff;
   --status-active: #22c55e;
   --status-beta: #eab308;
   --status-broken: #ef4444;
@@ -177,7 +175,6 @@ h1 {
 .tag.vercel { background: var(--tag-vercel-bg); color: var(--tag-vercel-fg); }
 .tag.apps-script { background: var(--tag-apps-bg); color: var(--tag-apps-fg); }
 .tag.local { background: var(--tag-local-bg); color: var(--tag-local-fg); }
-.tag.gh-pages { background: var(--tag-ghp-bg); color: var(--tag-ghp-fg); }
 .empty {
   text-align: center;
   color: var(--text-secondary);
@@ -298,16 +295,6 @@ const tools = [
     category: "校務行政"
   },
 
-  // ─── 工具 ───
-  {
-    title: "抽籤",
-    desc: "隨機抽籤(課堂點名、分組、抽運勢都能用)",
-    url: "https://ivanchen114.github.io/draw.html",
-    tag: "gh-pages",
-    status: "active",
-    category: "工具"
-  },
-
   // ─── 本機工具 (需先啟動) ───
   {
     title: "學習單批改審核系統",
@@ -320,7 +307,7 @@ const tools = [
 ];
 
 // 分類顯示順序(沒列到的會自動排在最後)
-const categoryOrder = ["教學網站", "校務行政", "工具", "本機工具"];
+const categoryOrder = ["教學網站", "校務行政", "本機工具"];
 
 // ============================================================
 // 渲染與搜尋邏輯
@@ -328,8 +315,7 @@ const categoryOrder = ["教學網站", "校務行政", "工具", "本機工具"]
 const tagLabels = {
   "vercel": "Vercel",
   "apps-script": "Apps Script",
-  "local": "本機",
-  "gh-pages": "GitHub Pages"
+  "local": "本機"
 };
 
 function render(filter = "") {
