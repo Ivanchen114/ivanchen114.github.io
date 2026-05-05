@@ -1,405 +1,445 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>艾文的工具櫃</title>
-<meta name="description" content="教學網站、校務工具、實驗中的東西,都在這。">
-<style>
-:root {
-  --bg: #fafafa;
-  --card-bg: #ffffff;
-  --text: #1a1a1a;
-  --text-secondary: #666;
-  --border: #e5e5e5;
-  --accent: #2563eb;
-  --shadow: 0 4px 12px rgba(0,0,0,0.06);
-  --tag-vercel-bg: #111;
-  --tag-vercel-fg: #fff;
-  --tag-apps-bg: #1a73e8;
-  --tag-apps-fg: #fff;
-  --tag-local-bg: #16a34a;
-  --tag-local-fg: #fff;
-  --status-active: #22c55e;
-  --status-beta: #eab308;
-  --status-broken: #ef4444;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a0a0a;
-    --card-bg: #161616;
-    --text: #fafafa;
-    --text-secondary: #999;
-    --border: #2a2a2a;
-    --accent: #60a5fa;
-    --shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  padding: 2.5rem 1.25rem 4rem;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
-.container { max-width: 1100px; margin: 0 auto; }
-header { margin-bottom: 2rem; }
-h1 {
-  font-size: 1.85rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.02em;
-}
-.tagline {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-}
-.search-wrap {
-  margin-top: 1.5rem;
-  position: relative;
-}
-.search {
-  width: 100%;
-  padding: 0.8rem 3rem 0.8rem 2.75rem;
-  font-size: 0.95rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  font-family: inherit;
-}
-.search:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  pointer-events: none;
-  font-size: 1.1rem;
-}
-.kbd {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  padding: 0.15rem 0.45rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-secondary);
-  font-family: ui-monospace, "SF Mono", Consolas, monospace;
-}
-.section { margin-bottom: 2.25rem; }
-.section-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 0.85rem;
-}
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 1.1rem 0.9rem;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.15s ease, border-color 0.15s, box-shadow 0.15s;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-.card-title {
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: -0.005em;
-}
-.status {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.status.active { background: var(--status-active); box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15); }
-.status.beta { background: var(--status-beta); box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.15); }
-.status.broken { background: var(--status-broken); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15); }
-.card-desc {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  flex-grow: 1;
-}
-.card-footer {
-  margin-top: 0.55rem;
-  display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-.tag {
-  font-size: 0.68rem;
-  padding: 0.18rem 0.5rem;
-  border-radius: 5px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-.tag.vercel { background: var(--tag-vercel-bg); color: var(--tag-vercel-fg); }
-.tag.apps-script { background: var(--tag-apps-bg); color: var(--tag-apps-fg); }
-.tag.local { background: var(--tag-local-bg); color: var(--tag-local-fg); }
-.empty {
-  text-align: center;
-  color: var(--text-secondary);
-  padding: 3rem 1rem;
-  font-size: 0.9rem;
-}
-footer {
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-}
-footer .legend {
-  display: inline-flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-footer .legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-@media (max-width: 600px) {
-  body { padding: 1.5rem 1rem 3rem; }
-  h1 { font-size: 1.5rem; }
-  .grid { grid-template-columns: 1fr; }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>抽籤</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, 
+                #87CEEB 0%, 
+                #87CEEB 50%, 
+                #1a1a2e 50%, 
+                #1a1a2e 100%
+            );
+            font-family: 'Noto Serif TC', serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 太陽 */
+        .sun {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            top: 5%;
+            left: 10%;
+            opacity: 0.8;
+        }
+        .sun::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #ffd700;
+            border-radius: 50%;
+            box-shadow: 0 0 60px #ffd700;
+        }
+        .sun::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            top: -240px;
+            left: -240px;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255, 215, 0, 0) 5deg,
+                rgba(255, 215, 0, 0.3) 7.5deg,
+                rgba(255, 215, 0, 0) 10deg,
+                transparent 15deg,
+                transparent 30deg,
+                rgba(255, 215, 0, 0) 35deg,
+                rgba(255, 215, 0, 0.3) 37.5deg,
+                rgba(255, 215, 0, 0) 40deg,
+                transparent 45deg,
+                transparent 60deg,
+                rgba(255, 215, 0, 0) 65deg,
+                rgba(255, 215, 0, 0.3) 67.5deg,
+                rgba(255, 215, 0, 0) 70deg,
+                transparent 75deg,
+                transparent 90deg,
+                rgba(255, 215, 0, 0) 95deg,
+                rgba(255, 215, 0, 0.3) 97.5deg,
+                rgba(255, 215, 0, 0) 100deg,
+                transparent 105deg,
+                transparent 120deg,
+                rgba(255, 215, 0, 0) 125deg,
+                rgba(255, 215, 0, 0.3) 127.5deg,
+                rgba(255, 215, 0, 0) 130deg,
+                transparent 135deg,
+                transparent 150deg,
+                rgba(255, 215, 0, 0) 155deg,
+                rgba(255, 215, 0, 0.3) 157.5deg,
+                rgba(255, 215, 0, 0) 160deg,
+                transparent 165deg,
+                transparent 180deg,
+                rgba(255, 215, 0, 0) 185deg,
+                rgba(255, 215, 0, 0.3) 187.5deg,
+                rgba(255, 215, 0, 0) 190deg,
+                transparent 195deg,
+                transparent 210deg,
+                rgba(255, 215, 0, 0) 215deg,
+                rgba(255, 215, 0, 0.3) 217.5deg,
+                rgba(255, 215, 0, 0) 220deg,
+                transparent 225deg,
+                transparent 240deg,
+                rgba(255, 215, 0, 0) 245deg,
+                rgba(255, 215, 0, 0.3) 247.5deg,
+                rgba(255, 215, 0, 0) 250deg,
+                transparent 255deg,
+                transparent 270deg,
+                rgba(255, 215, 0, 0) 275deg,
+                rgba(255, 215, 0, 0.3) 277.5deg,
+                rgba(255, 215, 0, 0) 280deg,
+                transparent 285deg,
+                transparent 300deg,
+                rgba(255, 215, 0, 0) 305deg,
+                rgba(255, 215, 0, 0.3) 307.5deg,
+                rgba(255, 215, 0, 0) 310deg,
+                transparent 315deg,
+                transparent 330deg,
+                rgba(255, 215, 0, 0) 335deg,
+                rgba(255, 215, 0, 0.3) 337.5deg,
+                rgba(255, 215, 0, 0) 340deg,
+                transparent 345deg
+            );
+            pointer-events: none;
+            animation: rotateSun 20s linear infinite;
+        }
+        @keyframes rotateSun {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 月亮 */
+        .moon {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: #e5e7eb;
+            border-radius: 50%;
+            bottom: 10%;
+            right: 10%;
+            opacity: 0.8;
+        }
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -25%;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            border-radius: 50%;
+            transform: none;
+        }
+
+        /* 雲朵 */
+        .cloud {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            opacity: 0.6;
+            animation: float linear infinite;
+        }
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+        .cloud1 {
+            width: 100px;
+            height: 30px;
+            top: 15%;
+            left: -100px;
+            animation-duration: 25s;
+        }
+        .cloud1::before {
+            width: 50px;
+            height: 50px;
+            top: -20px;
+            left: 15px;
+        }
+        .cloud1::after {
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            right: 15px;
+        }
+        .cloud2 {
+            width: 80px;
+            height: 25px;
+            top: 30%;
+            left: -80px;
+            animation-duration: 20s;
+            animation-delay: -15s;
+        }
+        .cloud2::before {
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            left: 10px;
+        }
+        .cloud2::after {
+            width: 30px;
+            height: 30px;
+            top: -10px;
+            right: 10px;
+        }
+        .cloud3 {
+            width: 120px;
+            height: 35px;
+            top: 45%;
+            left: -120px;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+        .cloud3::before {
+            width: 60px;
+            height: 60px;
+            top: -25px;
+            left: 20px;
+        }
+        .cloud3::after {
+            width: 45px;
+            height: 45px;
+            top: -20px;
+            right: 20px;
+        }
+        @keyframes float {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(50vw - 100px)); }
+        }
+
+        /* 星星 */
+        .stars {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            clip-path: polygon(100% 100%, 50% 50%, 100% 0, 100% 100%);
+        }
+        .star {
+            position: absolute;
+            background: white;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
+                               79% 91%, 50% 70%, 21% 91%, 32% 57%, 
+                               2% 35%, 39% 35%);
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+            100% { opacity: 0.2; transform: scale(1); }
+        }
+
+        /* 主要內容區塊 */
+        .scroll-container {
+            width: 320px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .subtitle {
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 抽籤容器 */
+        .fortune-container {
+            width: 160px;
+            height: 256px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        .fortune-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* 外發光效果 - 調整放在圖片周圍 */
+        .bamboo-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 160px;
+            height: 256px;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 80%
+            );
+            filter: blur(8px);
+            z-index: 0;
+        }
+
+        /* 籤筒區域 */
+        #bambooContainer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 0.5rem;
+            overflow: visible; /* 為了讓光暈不被裁切 */
+        }
+        #bambooContainer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1; /* 高於光暈 */
+        }
+
+        /* 點擊後顯示籤號的區域（改成在 hint-text 顯示） */
+        /* 可以用 slip 當作抽出的籤樣式 */
+        .slip {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            color: #1a1a2e;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .hint-text {
+            margin-top: 2rem;
+            color: white;
+            font-size: 1rem;
+            z-index: 1;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* 搖晃效果 */
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        .shaking {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>艾文的工具櫃</h1>
-    <p class="tagline">教學網站、校務工具、實驗中的東西,都在這。</p>
-    <div class="search-wrap">
-      <span class="search-icon">⌕</span>
-      <input type="text" class="search" id="search" placeholder="搜尋工具…(標題、說明、標籤)" autocomplete="off">
-      <span class="kbd">/</span>
-    </div>
-  </header>
-  <main id="content"></main>
-  <footer>
-    <div class="legend">
-      <span><span class="status active"></span> 使用中</span>
-      <span><span class="status beta"></span> 半成品</span>
-      <span><span class="status broken"></span> 壞了/廢棄</span>
-    </div>
-    <div id="last-updated"></div>
-  </footer>
-</div>
+    <!-- 背景物件：太陽、月亮、星星、雲 -->
+    <div class="sun"></div>
+    <div class="moon"></div>
+    <div class="stars"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
 
-<script>
-// ============================================================
-// 工具清單 — 新增工具:在下方陣列加一行物件,完全不用動 HTML
-// ============================================================
-const tools = [
-  // ─── 教學網站 ───
-  {
-    title: "松山高中探究與實作",
-    desc: "探究與實作課程教學網站",
-    url: "https://sssh-inquiry.vercel.app/",
-    tag: "vercel",
-    status: "active",
-    category: "教學網站"
-  },
-  {
-    title: "研究方法與專題",
-    desc: "松山高中研究方法與專題教學網站",
-    url: "https://research-navigator-nu.vercel.app/",
-    tag: "vercel",
-    status: "active",
-    category: "教學網站"
-  },
-  {
-    title: "物理漫遊實驗室",
-    desc: "物理實驗互動模擬",
-    url: "https://physics-lab-sssh.vercel.app/",
-    tag: "vercel",
-    status: "active",
-    category: "教學網站"
-  },
-
-  // ─── 校務行政 (Apps Script) ───
-  {
-    title: "座位與分組系統",
-    desc: "排座位、隨機分組",
-    url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbyvdkusUZmOFYkVI3Ui-v8idtUHK4ErE5YxtkkkwtqTbI8FgMy-LNCicFUGaSIFQHw/exec",
-    tag: "apps-script",
-    status: "active",
-    category: "校務行政"
-  },
-  {
-    title: "設備管理系統",
-    desc: "設備借用、清點、追蹤",
-    url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbzXFJCr51h4wzhr0nXxTcDRYG1nTj9U_3WxCvkP1zjJL_X-6SFGZTXdb9THZiuTEPLQ/exec",
-    tag: "apps-script",
-    status: "active",
-    category: "校務行政"
-  },
-  {
-    title: "自主學習平台",
-    desc: "學生自主學習計畫管理",
-    url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbzQTRrjJ4fgETXGutO0i8o5GSbLhwF43hWWuVprAXPyvpyeVdsP2zqcWiWpYovZ-5LX/exec",
-    tag: "apps-script",
-    status: "active",
-    category: "校務行政"
-  },
-  {
-    title: "場地管理系統",
-    desc: "場地預約與排程",
-    url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbwne_ySAlRS8iMZKROZKtpFEy4OY81BRNK6goFRYC-R2QoJVZMK6pl69YHV0CMvEqiw4A/exec",
-    tag: "apps-script",
-    status: "active",
-    category: "校務行政"
-  },
-
-  // ─── 本機工具 (需先啟動) ───
-  {
-    title: "學習單批改審核系統",
-    desc: "Flask 本機應用 — 需先執行啟動腳本後才會通",
-    url: "http://localhost:5050",
-    tag: "local",
-    status: "active",
-    category: "本機工具"
-  }
-];
-
-// 分類顯示順序(沒列到的會自動排在最後)
-const categoryOrder = ["教學網站", "校務行政", "本機工具"];
-
-// ============================================================
-// 渲染與搜尋邏輯
-// ============================================================
-const tagLabels = {
-  "vercel": "Vercel",
-  "apps-script": "Apps Script",
-  "local": "本機"
-};
-
-function render(filter = "") {
-  const content = document.getElementById("content");
-  const f = filter.toLowerCase().trim();
-  const filtered = tools.filter(t =>
-    !f ||
-    t.title.toLowerCase().includes(f) ||
-    t.desc.toLowerCase().includes(f) ||
-    t.tag.toLowerCase().includes(f) ||
-    t.category.toLowerCase().includes(f) ||
-    (tagLabels[t.tag] || "").toLowerCase().includes(f)
-  );
-
-  if (filtered.length === 0) {
-    content.innerHTML = '<div class="empty">沒有符合的工具。試試別的關鍵字?</div>';
-    return;
-  }
-
-  // 收集所有出現的分類,按 categoryOrder 排序,其餘附在後面
-  const cats = [...new Set(filtered.map(t => t.category))];
-  cats.sort((a, b) => {
-    const ia = categoryOrder.indexOf(a);
-    const ib = categoryOrder.indexOf(b);
-    if (ia === -1 && ib === -1) return a.localeCompare(b);
-    if (ia === -1) return 1;
-    if (ib === -1) return -1;
-    return ia - ib;
-  });
-
-  let html = "";
-  for (const cat of cats) {
-    const items = filtered.filter(t => t.category === cat);
-    html += `<section class="section"><div class="section-title">${escapeHtml(cat)}</div><div class="grid">`;
-    for (const t of items) {
-      const tagLabel = tagLabels[t.tag] || t.tag;
-      html += `<a class="card" href="${escapeAttr(t.url)}" target="_blank" rel="noopener noreferrer">
-        <div class="card-header">
-          <div class="card-title">${escapeHtml(t.title)}</div>
-          <div class="status ${t.status}" title="${t.status}"></div>
+    <!-- 主要內容容器 -->
+    <div class="scroll-container">
+        <div class="title">他/她的日與夜</div>
+        <div class="subtitle">人物今日運勢</div>
+        
+        <!-- 點擊後抽籤的籤筒 -->
+        <div class="fortune-container" id="fortuneContainer">
+            <div class="bamboo-glow"></div> <!-- 光暈效果 -->
+            <div id="bambooContainer">
+                <!-- 籤筒圖片 -->
+                <img 
+                  src="https://i.imgur.com/2uLW6bT.png"
+                  alt="籤筒"
+                />
+            </div>
         </div>
-        <div class="card-desc">${escapeHtml(t.desc)}</div>
-        <div class="card-footer">
-          <span class="tag ${t.tag}">${escapeHtml(tagLabel)}</span>
-        </div>
-      </a>`;
-    }
-    html += `</div></section>`;
-  }
-  content.innerHTML = html;
-}
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  }[c]));
-}
-function escapeAttr(s) { return escapeHtml(s); }
+        <!-- 點擊前：顯示文字「點擊竹筒抽籤」；點擊後：改成籤號樣式 -->
+        <div class="hint-text" id="hintText">點擊竹筒抽籤</div>
+    </div>
 
-// ============================================================
-// 互動:搜尋 + 鍵盤快捷鍵
-// ============================================================
-const search = document.getElementById("search");
-search.addEventListener("input", e => render(e.target.value));
+    <script>
+        // 產生閃爍星星
+        const createStars = () => {
+            const stars = document.querySelector('.stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * (8 - 4) + 4;
+                
+                star.style.left = x + 'vw';
+                star.style.top = y + 'vh';
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                
+                stars.appendChild(star);
+            }
+        };
+        createStars();
 
-document.addEventListener("keydown", e => {
-  // 按 / 聚焦搜尋框
-  if (e.key === "/" && document.activeElement !== search) {
-    e.preventDefault();
-    search.focus();
-    search.select();
-  }
-  // 按 Esc 清空並失焦
-  if (e.key === "Escape" && document.activeElement === search) {
-    search.value = "";
-    render();
-    search.blur();
-  }
-});
+        // 抽籤功能
+        const container = document.getElementById('fortuneContainer');
+        const bambooContainer = document.getElementById('bambooContainer');
+        const hintText = document.getElementById('hintText');
 
-document.getElementById("last-updated").textContent =
-  "最後更新:2026-04-25　·　共 " + tools.length + " 項工具";
+        let isAnimating = false;
 
-render();
-</script>
+        container.addEventListener('click', () => {
+            if (isAnimating) return;
+
+            isAnimating = true;
+            // 搖晃動畫
+            bambooContainer.classList.add('shaking');
+
+            setTimeout(() => {
+                // 隨機取得 1~58 的整數
+                const randomNumber = Math.floor(Math.random() * 58) + 1;
+
+                // 把籤號顯示在原先「點擊竹筒抽籤」那個文字區域
+                hintText.innerHTML = `<div class="slip">你抽到的籤號：${randomNumber}</div>`;
+
+                bambooContainer.classList.remove('shaking');
+
+                // 五秒後自動恢復為「點擊竹筒抽籤」
+                setTimeout(() => {
+                    hintText.innerHTML = '點擊竹筒抽籤';
+                    isAnimating = false;
+                }, 5000);
+
+            }, 500);
+        });
+    </script>
 </body>
 </html>
