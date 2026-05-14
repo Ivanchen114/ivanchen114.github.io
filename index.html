@@ -183,6 +183,15 @@ h1 {
   border-radius: 4px;
   object-fit: contain;
 }
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
 .click-count {
   margin-left: auto;
   font-size: 0.7rem;
@@ -325,6 +334,7 @@ const tools = [
   // ─── 教學網站 ───
   {
     title: "松山高中探究與實作",
+    icon: "lightbulb",
     desc: "探究與實作課程教學網站",
     url: "https://sssh-inquiry.vercel.app/",
     tag: "vercel",
@@ -333,6 +343,7 @@ const tools = [
   },
   {
     title: "研究方法與專題",
+    icon: "compass",
     desc: "松山高中研究方法與專題教學網站",
     url: "https://research-navigator-nu.vercel.app/",
     tag: "vercel",
@@ -341,6 +352,7 @@ const tools = [
   },
   {
     title: "物理漫遊實驗室",
+    icon: "atom",
     desc: "物理實驗互動模擬",
     url: "https://physics-lab-sssh.vercel.app/",
     tag: "vercel",
@@ -351,6 +363,7 @@ const tools = [
   // ─── 教學工具 (課堂用 Apps Script) ───
   {
     title: "W12 期中進度短報系統",
+    icon: "barchart",
     desc: "13 組短報投影 + 同儕回饋即時彙整 + 課堂計時器",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbyzYGRmyPeBTb8J79yWfOojEQSE3xWyMAadIEDs3KHc8pc2K92WFMOVmozDAwEtO7leMQ/exec",
     dataUrl: [
@@ -364,6 +377,7 @@ const tools = [
   },
   {
     title: "座位與分組系統",
+    icon: "grid",
     desc: "排座位、隨機分組",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbyvdkusUZmOFYkVI3Ui-v8idtUHK4ErE5YxtkkkwtqTbI8FgMy-LNCicFUGaSIFQHw/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1nire1N-VDur3PSX0OhBNpPiT0-hzgv7p6jf4e_HyUgM/edit",
@@ -376,6 +390,7 @@ const tools = [
   // ─── 校務行政 (Apps Script) ───
   {
     title: "設備管理系統",
+    icon: "package",
     desc: "設備借用、清點、追蹤",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbzXFJCr51h4wzhr0nXxTcDRYG1nTj9U_3WxCvkP1zjJL_X-6SFGZTXdb9THZiuTEPLQ/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1HasuCARF-j9SxghbL3_EsuQyuZ_RluxC4RIlZkMzd3I/edit",
@@ -386,6 +401,7 @@ const tools = [
   },
   {
     title: "自主學習平台",
+    icon: "target",
     desc: "學生自主學習計畫管理",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbzQTRrjJ4fgETXGutO0i8o5GSbLhwF43hWWuVprAXPyvpyeVdsP2zqcWiWpYovZ-5LX/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1-k9ghXFNeMtNQkDOYuIH67vqxyovlGY-1A2V-0T7R58/edit",
@@ -396,6 +412,7 @@ const tools = [
   },
   {
     title: "場地管理系統",
+    icon: "mappin",
     desc: "場地預約與排程",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbwne_ySAlRS8iMZKROZKtpFEy4OY81BRNK6goFRYC-R2QoJVZMK6pl69YHV0CMvEqiw4A/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1c6gCQj_j58Psdj4GaTNGW_bxtHglLuOQl_bIHivdHGw/edit",
@@ -406,6 +423,7 @@ const tools = [
   },
   {
     title: "資訊預算控帳系統",
+    icon: "calculator",
     desc: "資訊設備預算編列與控帳",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbwlrTB_M8oSAiRlJxxii03i6lSsxeJX7eBvvyKKhDmKgsIFH-Gv8Kg5tKlsfzbScYUhMw/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1M3I99-viZHu0YZedn_0meGNOykB4OVHwNgo2A9fSGVM/edit",
@@ -418,6 +436,7 @@ const tools = [
   // ─── 工具 ───
   {
     title: "抽籤",
+    icon: "dice",
     desc: "隨機抽籤(課堂點名、分組、抽運勢都能用)",
     url: "https://ivanchen114.github.io/draw.html",
     tag: "gh-pages",
@@ -428,6 +447,7 @@ const tools = [
   // ─── 本機工具 (需先啟動) ───
   {
     title: "學習單批改審核系統",
+    icon: "clipboard",
     desc: "Flask 本機應用 — 需先執行啟動腳本後才會通",
     url: "http://localhost:5050",
     tag: "local",
@@ -456,7 +476,19 @@ const iconPaths = {
   laptop: '<rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M2 20h20"/>',
   presentation: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>',
   sheet: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',
-  code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'
+  code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+  // ── 各工具專屬圖示 ──
+  lightbulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  atom: '<circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/>',
+  barchart: '<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
+  grid: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+  package: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  mappin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  calculator: '<rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+  dice: '<rect width="12" height="12" x="2" y="10" rx="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/>',
+  clipboard: '<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>'
 };
 
 function renderIcon(name, size) {
@@ -512,6 +544,10 @@ function render(filter = "") {
       const tagLabel = tagLabels[t.tag] || t.tag;
       const favicon = getFavicon(t.url);
       const clicks = getClickCount(t.url);
+      // 有設 icon 就用專屬 SVG 圖示,否則退回 favicon
+      const iconHtml = t.icon
+        ? `<span class="card-icon">${renderIcon(t.icon, 22)}</span>`
+        : (favicon ? `<img class="favicon" src="${escapeAttr(favicon)}" alt="" onerror="this.style.display='none'">` : "");
       const extras = [];
       // dataUrl 支援字串 OR 陣列 [{url, label}, ...]
       const dataLinks = !t.dataUrl ? []
@@ -525,7 +561,7 @@ function render(filter = "") {
       const extrasHtml = extras.length ? `<div class="extras">${extras.join("")}</div>` : "";
       html += `<div class="card" data-url="${escapeAttr(t.url)}" tabindex="0" role="link" aria-label="${escapeAttr(t.title)}">
         <div class="card-header">
-          ${favicon ? `<img class="favicon" src="${escapeAttr(favicon)}" alt="" onerror="this.style.display='none'">` : ""}
+          ${iconHtml}
           <div class="card-title">${escapeHtml(t.title)}</div>
           <div class="status ${t.status}" title="${t.status}"></div>
         </div>
