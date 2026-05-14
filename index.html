@@ -142,15 +142,23 @@ h1 {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 1rem 1.1rem 0.9rem;
+  padding: 1rem 1.1rem;
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s ease, border-color 0.15s, box-shadow 0.15s;
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
   cursor: pointer;
   outline: none;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 0;
 }
 .card:focus-visible {
   border-color: var(--accent);
@@ -187,8 +195,8 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
   color: var(--accent);
 }
@@ -546,7 +554,7 @@ function render(filter = "") {
       const clicks = getClickCount(t.url);
       // 有設 icon 就用專屬 SVG 圖示,否則退回 favicon
       const iconHtml = t.icon
-        ? `<span class="card-icon">${renderIcon(t.icon, 26)}</span>`
+        ? `<span class="card-icon">${renderIcon(t.icon, 48)}</span>`
         : (favicon ? `<img class="favicon" src="${escapeAttr(favicon)}" alt="" onerror="this.style.display='none'">` : "");
       const extras = [];
       // dataUrl 支援字串 OR 陣列 [{url, label}, ...]
@@ -560,16 +568,18 @@ function render(filter = "") {
       if (t.codeUrl) extras.push(`<a class="extra-link" href="${escapeAttr(t.codeUrl)}" target="_blank" rel="noopener noreferrer" title="原始碼 / 編輯器" aria-label="原始碼">${renderIcon("code", 14)}</a>`);
       const extrasHtml = extras.length ? `<div class="extras">${extras.join("")}</div>` : "";
       html += `<div class="card" data-url="${escapeAttr(t.url)}" tabindex="0" role="link" aria-label="${escapeAttr(t.title)}">
-        <div class="card-header">
-          ${iconHtml}
-          <div class="card-title">${escapeHtml(t.title)}</div>
-          <div class="status ${t.status}" title="${t.status}"></div>
-        </div>
-        <div class="card-desc">${escapeHtml(t.desc)}</div>
-        <div class="card-footer">
-          <span class="tag ${t.tag}">${escapeHtml(tagLabel)}</span>
-          ${extrasHtml}
-          ${clicks > 0 ? `<span class="click-count" title="點擊次數">↗ ${clicks}</span>` : ""}
+        ${iconHtml}
+        <div class="card-body">
+          <div class="card-header">
+            <div class="card-title">${escapeHtml(t.title)}</div>
+            <div class="status ${t.status}" title="${t.status}"></div>
+          </div>
+          <div class="card-desc">${escapeHtml(t.desc)}</div>
+          <div class="card-footer">
+            <span class="tag ${t.tag}">${escapeHtml(tagLabel)}</span>
+            ${extrasHtml}
+            ${clicks > 0 ? `<span class="click-count" title="點擊次數">↗ ${clicks}</span>` : ""}
+          </div>
         </div>
       </div>`;
     }
