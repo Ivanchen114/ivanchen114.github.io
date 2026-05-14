@@ -187,8 +187,8 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
   color: var(--accent);
 }
@@ -546,7 +546,7 @@ function render(filter = "") {
       const clicks = getClickCount(t.url);
       // 有設 icon 就用專屬 SVG 圖示,否則退回 favicon
       const iconHtml = t.icon
-        ? `<span class="card-icon">${renderIcon(t.icon, 22)}</span>`
+        ? `<span class="card-icon">${renderIcon(t.icon, 26)}</span>`
         : (favicon ? `<img class="favicon" src="${escapeAttr(favicon)}" alt="" onerror="this.style.display='none'">` : "");
       const extras = [];
       // dataUrl 支援字串 OR 陣列 [{url, label}, ...]
