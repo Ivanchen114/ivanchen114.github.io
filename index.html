@@ -520,10 +520,10 @@ const tagLabels = {
   "gh-pages": "GitHub Pages"
 };
 
-function render(filter = "") {
-  const content = document.getElementById("content");
+// 依搜尋字串過濾
+function matchTools(filter = "") {
   const f = filter.toLowerCase().trim();
-  const filtered = tools.filter(t =>
+  return tools.filter(t =>
     !f ||
     t.title.toLowerCase().includes(f) ||
     t.desc.toLowerCase().includes(f) ||
@@ -531,13 +531,13 @@ function render(filter = "") {
     t.category.toLowerCase().includes(f) ||
     (tagLabels[t.tag] || "").toLowerCase().includes(f)
   );
+}
 
-  if (filtered.length === 0) {
-    content.innerHTML = '<div class="empty">沒有符合的工具。試試別的關鍵字?</div>';
-    return;
-  }
-
-  // 收集所有出現的分類,按 categoryOrder 排序,其餘附在後面
+// 過濾 + 排序成「畫面上的顯示順序」:
+// 分類按 categoryOrder(沒列到的排最後),分類內依點擊數高→低,
+// 常用工具自動浮上來;點擊數相同時保持 tools 陣列原順序
+function getDisplayList(filter = "") {
+  const filtered = matchTools(filter);
   const cats = [...new Set(filtered.map(t => t.category))];
   cats.sort((a, b) => {
     const ia = categoryOrder.indexOf(a);
@@ -547,10 +547,25 @@ function render(filter = "") {
     if (ib === -1) return -1;
     return ia - ib;
   });
+  return cats.map(cat => ({
+    cat,
+    items: filtered
+      .filter(t => t.category === cat)
+      .sort((a, b) => getClickCount(b.url) - getClickCount(a.url))
+  }));
+}
+
+function render(filter = "") {
+  const content = document.getElementById("content");
+  const groups = getDisplayList(filter);
+
+  if (groups.length === 0) {
+    content.innerHTML = '<div class="empty">沒有符合的工具。試試別的關鍵字?</div>';
+    return;
+  }
 
   let html = "";
-  for (const cat of cats) {
-    const items = filtered.filter(t => t.category === cat);
+  for (const { cat, items } of groups) {
     const icon = categoryIcons[cat] ? `<span class="cat-icon" aria-hidden="true">${renderIcon(categoryIcons[cat], 16)}</span>` : "";
     html += `<section class="section"><div class="section-title">${icon}${escapeHtml(cat)}</div><div class="grid">`;
     for (const t of items) {
@@ -613,11 +628,16 @@ function getFavicon(url) {
 }
 
 // 點擊次數 — localStorage,key 用 url
+// 包 try/catch:localStorage 不可用時(無痕模式等)寧可不記數,也不能擋住開連結
 function getClickCount(url) {
-  return parseInt(localStorage.getItem("clicks_" + url) || "0", 10);
+  try {
+    return parseInt(localStorage.getItem("clicks_" + url) || "0", 10);
+  } catch { return 0; }
 }
 function incrementClickCount(url) {
-  localStorage.setItem("clicks_" + url, String(getClickCount(url) + 1));
+  try {
+    localStorage.setItem("clicks_" + url, String(getClickCount(url) + 1));
+  } catch { /* 記不了就算了 */ }
 }
 
 // ============================================================
@@ -625,6 +645,17 @@ function incrementClickCount(url) {
 // ============================================================
 const search = document.getElementById("search");
 search.addEventListener("input", e => render(e.target.value));
+
+// Enter 直接開「畫面上第一個」結果 — launcher 動線:/ → 關鍵字 → Enter
+search.addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  const groups = getDisplayList(search.value);
+  if (groups.length === 0 || groups[0].items.length === 0) return;
+  const first = groups[0].items[0];
+  incrementClickCount(first.url);
+  window.open(first.url, "_blank", "noopener,noreferrer");
+  setTimeout(() => render(search.value), 0);
+});
 
 // 點卡片時:打開主入口 + 記次數;若點到的是 .extra-link 則放行,讓那個 <a> 自己處理
 function handleCardActivate(target) {
@@ -663,8 +694,21 @@ document.addEventListener("keydown", e => {
   }
 });
 
-document.getElementById("last-updated").textContent =
-  "最後更新:2026-06-05　·　共 " + tools.length + " 項工具";
+// 「最後更新」自動抓 GitHub 最後 commit 時間,不用手動維護
+// 離線或 API 限流時優雅降級:只顯示工具數
+const lastUpdatedEl = document.getElementById("last-updated");
+lastUpdatedEl.textContent = "共 " + tools.length + " 項工具";
+fetch("https://api.github.com/repos/ivanchen114/ivanchen114.github.io/commits?per_page=1")
+  .then(r => r.ok ? r.json() : Promise.reject(new Error("API " + r.status)))
+  .then(commits => {
+    const iso = commits?.[0]?.commit?.committer?.date;
+    if (!iso) return;
+    const d = new Date(iso);
+    const pad = n => String(n).padStart(2, "0");
+    lastUpdatedEl.textContent =
+      `最後更新:${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}　·　共 ${tools.length} 項工具`;
+  })
+  .catch(() => {});
 
 render();
 </script>
