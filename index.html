@@ -388,7 +388,7 @@ const tools = [
     category: "教學工具"
   },
 
-  // ─── 校務行政 (Apps Script) ───
+  // ─── 校務系統 (Apps Script) — category 決定分區:師生服務 / 教師服務 / 資媒組管理 ───
   {
     title: "設備管理系統",
     icon: "package",
@@ -398,7 +398,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/10C-k2GspcrwPlsfbzruTrjDBFmtusJs61IgUQl5QziTV2GbzHWueET93/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "資媒組管理"
   },
   {
     title: "自主學習平台",
@@ -409,7 +409,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/14nmPC6_-Sb9cBGTovf_wrlTEvdg6iCq0mL3Ne2juZOJbuyvXQvYE3uPC/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "師生服務"
   },
   {
     title: "場地管理系統",
@@ -420,7 +420,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/1NgPQboV7PJuBbna_cUAfsx-f3-4qYo0u4lgPICeNPaXv5hN9u7G2HLaN/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "資媒組管理"
   },
   {
     title: "資訊預算控帳系統",
@@ -431,7 +431,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/1CEupJ5m3eT5nmN9E-TmoLJ6dGH3_C9aD4fim3JYHoTZp4iZSv4Idf3_4/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "資媒組管理"
   },
   {
     title: "行政小工具收件平台",
@@ -442,7 +442,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/17yv3NKcOZmMjuF8x4NI8ItmK0I5nC6J4v0Dwq1nVNs_gX95rf-bxq2ot/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "教師服務"
   },
   {
     title: "公共服務媒合系統",
@@ -453,7 +453,7 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/1WpmQMSXBe_srVXsPlgGqsclba-7lSZcOJ3gxDdrDsWzYL26QpJG5aTLl/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "師生服務"
   },
   {
     title: "教職員通訊錄",
@@ -463,10 +463,10 @@ const tools = [
     codeUrl: "https://script.google.com/u/0/home/projects/1Pg5aKTGLS8PmR-CUyeoqiyKgUAs0kaz1UX8UfSpfdtdQ4zSv9dtdKr6k/edit",
     tag: "apps-script",
     status: "active",
-    category: "校務行政"
+    category: "教師服務"
   },
 
-  // ─── 工具 ───
+  // ─── 其他教學工具 ───
   {
     title: "抽籤",
     icon: "dice",
@@ -474,7 +474,7 @@ const tools = [
     url: "https://ivanchen114.github.io/draw.html",
     tag: "gh-pages",
     status: "active",
-    category: "工具"
+    category: "教學工具"
   },
 
   // ─── 本機工具 (需先啟動) ───
@@ -490,14 +490,16 @@ const tools = [
 ];
 
 // 分類顯示順序(沒列到的會自動排在最後)
-const categoryOrder = ["教學網站", "教學工具", "校務行政", "工具", "本機工具"];
+// 分類邏輯:教學兩區按「情境」分,其餘按「誰會用」分 — 師生 / 教師 / 只有資媒組
+const categoryOrder = ["教學網站", "教學工具", "師生服務", "教師服務", "資媒組管理", "本機工具"];
 
 // 分類前綴 icon(沒列到的就純文字,不影響運作)
 const categoryIcons = {
   "教學網站": "book",
   "教學工具": "presentation",
-  "校務行政": "folder",
-  "工具": "wrench",
+  "師生服務": "graduation",
+  "教師服務": "briefcase",
+  "資媒組管理": "shield",
   "本機工具": "laptop"
 };
 
@@ -524,7 +526,10 @@ const iconPaths = {
   clipboard: '<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
   inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
   users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-  contact: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><circle cx="12" cy="10" r="2"/><line x1="8" y1="2" x2="8" y2="4"/><line x1="16" y1="2" x2="16" y2="4"/>'
+  contact: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><circle cx="12" cy="10" r="2"/><line x1="8" y1="2" x2="8" y2="4"/><line x1="16" y1="2" x2="16" y2="4"/>',
+  graduation: '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+  briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>'
 };
 
 function renderIcon(name, size) {
