@@ -475,6 +475,19 @@ const tools = [
     category: "教師服務"
   },
 
+  // ─── 對外專案(全網域開放,不限校內) ───
+  {
+    title: "全國高中行政減量提案平台",
+    icon: "factory",
+    desc: "全國各校教師提報行政痛點,評估做成自動化小工具 + 範例庫",
+    url: "https://script.google.com/macros/s/AKfycbzVmZBOgckUVazYxaftgrofHMAwes8BMyuNfFawug_TjxKoOB90kAviNHIqV0gtmByVPA/exec",
+    dataUrl: "https://docs.google.com/spreadsheets/d/1HdJZiecHBsg_F128nH3DKa292vaoixa4Bnn0Xr02wuk/edit",
+    codeUrl: "https://script.google.com/u/0/home/projects/1eoWqfDZmHQDahXgfa89KqJF89x4luKlyjjiws-6_gt1aNlpzYwn-3q-I/edit",
+    tag: "apps-script",
+    status: "active",
+    category: "對外專案"
+  },
+
   // ─── 其他教學工具 ───
   {
     title: "抽籤",
@@ -500,7 +513,7 @@ const tools = [
 
 // 分類顯示順序(沒列到的會自動排在最後)
 // 分類邏輯:教學兩區按「情境」分,其餘按「誰會用」分 — 師生 / 教師 / 只有資媒組
-const categoryOrder = ["教學網站", "教學工具", "師生服務", "教師服務", "資媒組管理", "本機工具"];
+const categoryOrder = ["教學網站", "教學工具", "師生服務", "教師服務", "資媒組管理", "對外專案", "本機工具"];
 
 // 分類前綴 icon(沒列到的就純文字,不影響運作)
 const categoryIcons = {
@@ -509,6 +522,7 @@ const categoryIcons = {
   "師生服務": "graduation",
   "教師服務": "briefcase",
   "資媒組管理": "shield",
+  "對外專案": "globe",
   "本機工具": "laptop"
 };
 
@@ -539,7 +553,9 @@ const iconPaths = {
   contact: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><circle cx="12" cy="10" r="2"/><line x1="8" y1="2" x2="8" y2="4"/><line x1="16" y1="2" x2="16" y2="4"/>',
   graduation: '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
   briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
-  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>'
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  factory: '<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M6 18h12"/>'
 };
 
 function renderIcon(name, size) {
