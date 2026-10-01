@@ -330,6 +330,8 @@ footer .legend span {
 // 可選欄位(有填才會顯示對應的小按鈕):
 //   dataUrl — 原始資料,例如 Google Sheet 網址
 //   codeUrl — 原始碼,例如 Apps Script 編輯器或 GitHub repo
+// dataUrl / codeUrl 都可填「單一網址字串」或「陣列」:
+//   codeUrl: [{ url: "...", label: "主程式" }, { url: "...", label: "同步器" }]
 // ============================================================
 const tools = [
   // ─── 教學網站 ───
@@ -499,12 +501,26 @@ const tools = [
     category: "師生服務"
   },
   {
+    title: "官方 LINE 常見問題",
+    icon: "chat",
+    desc: "資媒組 LINE 官方帳號的常見問題查詢頁",
+    url: "https://script.google.com/macros/s/AKfycbyt6-eN4g156wtCeDw0WwAKgn7oxU67vP9ju5rid81xdFOkbDlER9MaHGov7BGAuvE86Q/exec",
+    dataUrl: "https://docs.google.com/spreadsheets/d/1OdWE5qgltw7NoBKCm5qOCNAyA2qmcTJwXG0Sv4GjW4Q/edit",
+    codeUrl: "https://script.google.com/home/projects/1-5JiwI0_lUBIuW3elPK-1AvcLYB8PdaYrzmE41cRPgXUY02MGhSSnQne/edit",
+    tag: "apps-script",
+    status: "active",
+    category: "師生服務"
+  },
+  {
     title: "教職員通訊錄",
     icon: "contact",
     desc: "全校教職員查詢 — 帳號直讀 Admin Console,分機等補充欄位存在 Sheet",
     url: "https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbyojAmGfIY7DTGHTVB8uV3J7j_h9xzxQ_GrcHDwxY7o9ceruMH7YfkbTtUhJdnsGi_R/exec",
     dataUrl: "https://docs.google.com/spreadsheets/d/1FqdAUwrIKw0KAMWa8rqyLjCzoTNs3E7xNEtzs9R12IE/edit",
-    codeUrl: "https://script.google.com/u/0/home/projects/1Pg5aKTGLS8PmR-CUyeoqiyKgUAs0kaz1UX8UfSpfdtdQ4zSv9dtdKr6k/edit",
+    codeUrl: [
+      { url: "https://script.google.com/u/0/home/projects/1Pg5aKTGLS8PmR-CUyeoqiyKgUAs0kaz1UX8UfSpfdtdQ4zSv9dtdKr6k/edit", label: "通訊錄主程式" },
+      { url: "https://script.google.com/home/projects/1_IkND0GBhWiQ48nsQgaRW-WK2zBgKG9hYdeMrG-OTTuTwKOSbKj_S5bM/edit", label: "Google 帳號待確認同步器" }
+    ],
     tag: "apps-script",
     status: "active",
     category: "教師服務"
@@ -592,7 +608,8 @@ const iconPaths = {
   factory: '<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M6 18h12"/>',
   cart: '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
   gallery: '<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="m21 15-4.35-4.35a2 2 0 0 0-2.83 0L3 21"/>',
-  sparkle: '<path d="M11.52 2.4a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.13 1.58a.5.5 0 0 1 0 .96l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0l-1.58-6.13a2 2 0 0 0-1.44-1.44L2.37 12.5a.5.5 0 0 1 0-.96l6.13-1.58a2 2 0 0 0 1.44-1.44z"/>'
+  sparkle: '<path d="M11.52 2.4a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.13 1.58a.5.5 0 0 1 0 .96l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0l-1.58-6.13a2 2 0 0 0-1.44-1.44L2.37 12.5a.5.5 0 0 1 0-.96l6.13-1.58a2 2 0 0 0 1.44-1.44z"/>',
+  chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>'
 };
 
 function renderIcon(name, size) {
@@ -676,7 +693,14 @@ function render(filter = "") {
         const label = d.label || "原始資料 (Sheet)";
         extras.push(`<a class="extra-link" href="${escapeAttr(d.url)}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(label)}" aria-label="${escapeAttr(label)}">${renderIcon("sheet", 14)}</a>`);
       });
-      if (t.codeUrl) extras.push(`<a class="extra-link" href="${escapeAttr(t.codeUrl)}" target="_blank" rel="noopener noreferrer" title="原始碼 / 編輯器" aria-label="原始碼">${renderIcon("code", 14)}</a>`);
+      // codeUrl 支援字串 OR 陣列 [{url, label}, ...]
+      const codeLinks = !t.codeUrl ? []
+        : Array.isArray(t.codeUrl) ? t.codeUrl
+        : [{ url: t.codeUrl, label: "原始碼 / 編輯器" }];
+      codeLinks.forEach(c => {
+        const label = c.label || "原始碼 / 編輯器";
+        extras.push(`<a class="extra-link" href="${escapeAttr(c.url)}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(label)}" aria-label="${escapeAttr(label)}">${renderIcon("code", 14)}</a>`);
+      });
       const extrasHtml = extras.length ? `<div class="extras">${extras.join("")}</div>` : "";
       html += `<div class="card" data-url="${escapeAttr(t.url)}" tabindex="0" role="link" aria-label="${escapeAttr(t.title)}">
         ${iconHtml}
